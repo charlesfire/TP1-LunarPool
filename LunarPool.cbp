@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="LunarPool" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/LunarPool" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add library="sfml-graphics-d" />
+					<Add library="sfml-window-d" />
+					<Add library="sfml-system-d" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/LunarPool" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-Wall" />
+			<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/SFML-2.3/include" />
+		</Compiler>
+		<Linker>
+			<Add library="mingw32" />
+			<Add library="user32" />
+			<Add library="gdi32" />
+			<Add library="winmm" />
+			<Add library="dxguid" />
+			<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/SFML-2.3/lib" />
+		</Linker>
+		<Unit filename="include/Ball.h" />
+		<Unit filename="include/Constantes.h" />
+		<Unit filename="include/Game.h" />
+		<Unit filename="include/Hole.h" />
+		<Unit filename="include/InGameState.h" />
+		<Unit filename="include/InMenuState.h" />
+		<Unit filename="include/PhysicBox.h" />
+		<Unit filename="include/PhysicCircle.h" />
+		<Unit filename="include/PhysicObject.h" />
+		<Unit filename="include/PhysicWorld.h" />
+		<Unit filename="include/State.h" />
+		<Unit filename="include/Table.h" />
+		<Unit filename="include/Wall.h" />
+		<Unit filename="include/temp.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/Ball.cpp" />
+		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/Hole.cpp" />
+		<Unit filename="src/InGameState.cpp" />
+		<Unit filename="src/InMenuState.cpp" />
+		<Unit filename="src/PhysicBox.cpp" />
+		<Unit filename="src/PhysicCircle.cpp" />
+		<Unit filename="src/PhysicObject.cpp" />
+		<Unit filename="src/PhysicWorld.cpp" />
+		<Unit filename="src/State.cpp" />
+		<Unit filename="src/Table.cpp" />
+		<Unit filename="src/Wall.cpp" />
+		<Unit filename="src/temp.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
