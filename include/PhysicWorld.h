@@ -3,6 +3,8 @@
 
 #include <vector>
 
+class PhysicBody;
+
 class PhysicWorld
 {
     public:

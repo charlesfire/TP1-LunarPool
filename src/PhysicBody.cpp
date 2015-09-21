@@ -10,6 +10,11 @@ PhysicBody::~PhysicBody()
     //dtor
 }
 
+void PhysicBody::AddImpulse(const sf::Vector2f& impulse)
+{
+    velocity += impulse;
+}
+
 void PhysicBody::SetIsStatic(bool isStatic)
 {
     this->isStatic = isStatic;
@@ -28,6 +33,11 @@ void PhysicBody::SetShape(Shape* shape)
 sf::Vector2f PhysicBody::GetPosition() const
 {
     return position;
+}
+
+sf::Vector2f PhysicBody::GetVelocity()const
+{
+    return velocity;
 }
 
 bool PhysicBody::IsStatic() const

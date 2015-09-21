@@ -4,7 +4,7 @@
 class Shape
 {
     public:
-        enum Type {Circle, AABB};
+        enum Type {Circle, AABB, COUNT};
         Shape() = default;
         virtual ~Shape() = default;
         virtual Type GetType()const = 0;
