@@ -5,12 +5,13 @@
 #include "Shape.h"
 
 class CircleShape;
+class Manifold;
 
 namespace Collision
 {
-    extern std::function<void(Shape*, Shape*)> CollisionCallbacks[Shape::Type::COUNT][Shape::Type::COUNT];
+    extern std::function<bool(Manifold*)> CollisionCallbacks[Shape::Type::COUNT][Shape::Type::COUNT];
 
-    void IsColliding(const CircleShape* circle1, const CircleShape* circle2);
+    bool IsColliding(const CircleShape* circle1, const sf::Vector2f& position1, const CircleShape* circle2, const sf::Vector2f& position2);
 }
 
 #endif // COLLISION_H

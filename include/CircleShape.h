@@ -3,11 +3,13 @@
 
 #include "Shape.h"
 
-class CircleShape : Shape
+class CircleShape : public Shape
 {
     public:
         CircleShape();
         virtual ~CircleShape();
+        void SetRadius(const float radius);
+        float GetRadius()const;
         virtual Type GetType()const;
     private:
         float radius;

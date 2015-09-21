@@ -20,7 +20,7 @@ void PhysicBody::SetIsStatic(bool isStatic)
     this->isStatic = isStatic;
 }
 
-void PhysicBody::SetPosition(sf::Vector2f& position)
+void PhysicBody::SetPosition(const sf::Vector2f& position)
 {
     this->position = position;
 }
@@ -38,6 +38,11 @@ sf::Vector2f PhysicBody::GetPosition() const
 sf::Vector2f PhysicBody::GetVelocity()const
 {
     return velocity;
+}
+
+const Shape* PhysicBody::GetShape() const
+{
+    return shape;
 }
 
 bool PhysicBody::IsStatic() const

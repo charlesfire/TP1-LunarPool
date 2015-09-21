@@ -12,15 +12,15 @@ class PhysicBody
         virtual ~PhysicBody();
         void AddImpulse(const sf::Vector2f& impulse);
         void SetIsStatic(bool isStatic);
-        void SetPosition(sf::Vector2f& position);
+        void SetPosition(const sf::Vector2f& position);
         void SetShape(Shape* shape);
         sf::Vector2f GetPosition()const;
         sf::Vector2f GetVelocity()const;
+        const Shape* GetShape()const;
         bool IsStatic()const;
     private:
         Shape* shape;
-        sf::Vector2f position;
-        sf::Vector2f velocity;
+        sf::Vector2f position, velocity;
         bool isStatic;
 };
 
