@@ -10,6 +10,7 @@ class CircleShape : Shape
         virtual ~CircleShape();
         virtual Type GetType()const;
     private:
+        float radius;
 };
 
 #endif // CIRCLESHAPE_H
