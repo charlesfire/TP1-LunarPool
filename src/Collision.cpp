@@ -3,44 +3,51 @@
 #include <SFML/System/Vector2.hpp>
 #include "PhysicBody.h"
 #include "CircleShape.h"
-#include "Manifold.h"
+#include <iostream>
 
 namespace Collision
 {
-    bool CircleToCircle(Manifold* manifold);
-    bool CircleToAABB(Manifold* manifold);
-    bool AABBToCircle(Manifold* manifold);
-    bool AABBToAABB(Manifold* manifold);
+    void CircleToCircle(PhysicBody* body1, PhysicBody* body2);
+    void CircleToAABB(PhysicBody* body1, PhysicBody* body2);
+    void AABBToCircle(PhysicBody* body1, PhysicBody* body2);
+    void AABBToAABB(PhysicBody* body1, PhysicBody* body2);
+    sf::Vector2f CalculateUnitVector(const sf::Vector2f& vect);
 
-    std::function<bool(Manifold*)> CollisionCallbacks[Shape::Type::COUNT][Shape::Type::COUNT] = {{CircleToCircle, CircleToAABB}, {AABBToCircle, AABBToAABB}};
+    std::function<void(PhysicBody*, PhysicBody*)> collisionCallbacks[Shape::Type::COUNT][Shape::Type::COUNT] = {{CircleToCircle, CircleToAABB}, {AABBToCircle, AABBToAABB}};
 
-    bool CircleToCircle(Manifold* manifold)
+    void CircleToCircle(PhysicBody* body1, PhysicBody* body2)
     {
-        const CircleShape* circle1 = static_cast<const CircleShape*>(manifold->body1->GetShape());
-        const CircleShape* circle2 = static_cast<const CircleShape*>(manifold->body2->GetShape());
-        const sf::Vector2f position1 = manifold->body1->GetPosition();
-        const sf::Vector2f position2 = manifold->body2->GetPosition();
-        float radius1 = circle1->GetRadius();
-        float radius2 = circle2->GetRadius();
+        const CircleShape* circle1 = static_cast<const CircleShape*>(body1->GetShape());
+        const CircleShape* circle2 = static_cast<const CircleShape*>(body2->GetShape());
+        sf::Vector2f position1 = body1->GetPosition();
+        sf::Vector2f position2 = body2->GetPosition();
+        sf::Vector2f velocity1 = body1->GetVelocity();
+        sf::Vector2f velocity2 = body2->GetVelocity();
+        float mass1 = body1->GetMass();
+        float mass2 = body2->GetMass();
 
         if (!IsColliding(circle1, position1, circle2, position2))
-            return false;
+            return;
 
-        manifold->contact = sf::Vector2f((position1.x * radius2 + position2.x * radius1) / (circle1->GetRadius() + circle2->GetRadius()),
-                                         (position1.y * radius2 + position2.y * radius1) / (circle1->GetRadius() + circle2->GetRadius()));
+        sf::Vector2f norm = CalculateUnitVector(position2 - position1);
+        float p = 2.f * ((velocity1.x * norm.x + velocity1.y * norm.y) - (velocity2.x * norm.x + velocity2.y * norm.y)) / (mass1 + mass2);
+        body1->SetVelocity(velocity1 - p * mass1 * norm);
+        body2->SetVelocity(velocity2 + p * mass2 * norm);
+
+        return;
     }
 
-    bool CircleToAABB(Manifold* manifold)
+    void CircleToAABB(PhysicBody* body1, PhysicBody* body2)
     {
 
     }
 
-    bool AABBToCircle(Manifold* manifold)
+    void AABBToCircle(PhysicBody* body1, PhysicBody* body2)
     {
 
     }
 
-    bool AABBToAABB(Manifold* manifold)
+    void AABBToAABB(PhysicBody* body1, PhysicBody* body2)
     {
 
     }
@@ -58,6 +65,6 @@ namespace Collision
 
         if (norm == 0.0f)
             return sf::Vector2f(0.0f, 0.0f);
-        return sf::Vector2f(vect.x/norm, vect.y/norm);
+        return vect/norm;
     }
 }

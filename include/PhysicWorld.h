@@ -8,8 +8,8 @@ class PhysicBody;
 class PhysicWorld
 {
     public:
-        PhysicWorld();
-        virtual ~PhysicWorld();
+        PhysicWorld() = default;
+        virtual ~PhysicWorld() = default;
         void Update();
         void AddBody(PhysicBody* body);
     private:

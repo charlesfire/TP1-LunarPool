@@ -1,6 +1,7 @@
 #include "PhysicBody.h"
+#include <stdexcept>
 
-PhysicBody::PhysicBody() : shape(nullptr), position(0.0f, 0.0f), isStatic(false)
+PhysicBody::PhysicBody() : shape(nullptr), position(0.0f, 0.0f), mass(1.f)
 {
     //ctor
 }
@@ -10,14 +11,12 @@ PhysicBody::~PhysicBody()
     //dtor
 }
 
-void PhysicBody::AddImpulse(const sf::Vector2f& impulse)
+void PhysicBody::SetMass(const float mass)
 {
-    velocity += impulse;
-}
-
-void PhysicBody::SetIsStatic(bool isStatic)
-{
-    this->isStatic = isStatic;
+    if (mass >= 0.f)
+        this->mass = mass;
+    else
+        throw std::invalid_argument("Mass can't be negative.");
 }
 
 void PhysicBody::SetPosition(const sf::Vector2f& position)
@@ -25,9 +24,20 @@ void PhysicBody::SetPosition(const sf::Vector2f& position)
     this->position = position;
 }
 
+void PhysicBody::SetVelocity(const sf::Vector2f& velocity)
+{
+    if (mass > 0.f)
+        this->velocity = velocity;
+}
+
 void PhysicBody::SetShape(Shape* shape)
 {
     this->shape = shape;
+}
+
+float PhysicBody::GetMass() const
+{
+    return mass;
 }
 
 sf::Vector2f PhysicBody::GetPosition() const
@@ -43,9 +53,4 @@ sf::Vector2f PhysicBody::GetVelocity()const
 const Shape* PhysicBody::GetShape() const
 {
     return shape;
-}
-
-bool PhysicBody::IsStatic() const
-{
-    return isStatic;
 }
