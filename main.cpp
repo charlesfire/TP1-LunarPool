@@ -4,6 +4,7 @@
 #include "PhysicBody.h"
 #include "CircleShape.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 int main()
 {
@@ -17,9 +18,10 @@ int main()
     world.AddBody(&body2);
     body1.SetPosition(sf::Vector2f(0.f, 0.f));
     body1.SetVelocity(sf::Vector2f(0.3f, 0.3f));
-    body2.SetPosition(sf::Vector2f(800.f, 800.f));
-    body2.SetVelocity(sf::Vector2f(-0.3f, -0.3f));
-    body2.SetMass(1.f);
+    body2.SetPosition(sf::Vector2f(400.f, 400.f));
+    body2.SetVelocity(sf::Vector2f(0.f, 0.f));
+    body2.SetInvertMass(0.f);
+    std::cout << body2.GetInvertMass();
     CircleShape circle;
     circle.SetRadius(20.0f);
     body1.SetShape(&circle);

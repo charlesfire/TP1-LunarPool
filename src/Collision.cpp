@@ -23,16 +23,16 @@ namespace Collision
         sf::Vector2f position2 = body2->GetPosition();
         sf::Vector2f velocity1 = body1->GetVelocity();
         sf::Vector2f velocity2 = body2->GetVelocity();
-        float mass1 = body1->GetMass();
-        float mass2 = body2->GetMass();
+        float invertMass1 = body1->GetInvertMass();
+        float invertMass2 = body2->GetInvertMass();
 
         if (!IsColliding(circle1, position1, circle2, position2))
             return;
 
         sf::Vector2f norm = CalculateUnitVector(position2 - position1);
-        float p = 2.f * ((velocity1.x * norm.x + velocity1.y * norm.y) - (velocity2.x * norm.x + velocity2.y * norm.y)) / (mass1 + mass2);
-        body1->SetVelocity(velocity1 - p * mass1 * norm);
-        body2->SetVelocity(velocity2 + p * mass2 * norm);
+        float p = 2.f * ((velocity1.x * norm.x + velocity1.y * norm.y) - (velocity2.x * norm.x + velocity2.y * norm.y)) / (invertMass1 + invertMass2);
+        body1->SetVelocity(velocity1 - p * invertMass1 * norm);
+        body2->SetVelocity(velocity2 + p * invertMass2 * norm);
 
         return;
     }

@@ -10,10 +10,12 @@ class PhysicBody
     public:
         PhysicBody();
         virtual ~PhysicBody();
+        void SetInvertMass(const float invertMass);
         void SetMass(const float mass);
         void SetPosition(const sf::Vector2f& position);
         void SetVelocity(const sf::Vector2f& velocity);
         void SetShape(Shape* shape);
+        float GetInvertMass()const;
         float GetMass()const;
         sf::Vector2f GetPosition()const;
         sf::Vector2f GetVelocity()const;
@@ -21,7 +23,7 @@ class PhysicBody
     private:
         Shape* shape;
         sf::Vector2f position, velocity;
-        float mass;
+        float invertMass;
 };
 
 #endif // PHYSICBODY_H

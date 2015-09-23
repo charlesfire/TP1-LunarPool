@@ -11,7 +11,7 @@ void PhysicWorld::Update()
     }
     for (unsigned int i(0); i < bodies.size(); i++)
     {
-        if (bodies[i]->GetMass() > 0.f)
+        if (bodies[i]->GetInvertMass() > 0.f)
         {
             for (unsigned int j(i + 1); j < bodies.size(); j++)
             {
