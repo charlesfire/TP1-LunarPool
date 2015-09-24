@@ -1,6 +1,6 @@
 #include "CircleShape.h"
 
-CircleShape::CircleShape() : radius(radius)
+CircleShape::CircleShape(const float radius) : radius(radius)
 {
     //ctor
 }

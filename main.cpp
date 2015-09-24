@@ -3,6 +3,7 @@
 #include "PhysicWorld.h"
 #include "PhysicBody.h"
 #include "CircleShape.h"
+#include "RectangleShape.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -16,19 +17,20 @@ int main()
     PhysicBody body1, body2;
     world.AddBody(&body1);
     world.AddBody(&body2);
-    body1.SetPosition(sf::Vector2f(0.f, 0.f));
-    body1.SetVelocity(sf::Vector2f(0.3f, 0.3f));
+    body1.SetPosition(sf::Vector2f(450.f, 0.f));
+    body1.SetVelocity(sf::Vector2f(0.0f, 0.1f));
     body2.SetPosition(sf::Vector2f(400.f, 400.f));
-    body2.SetMass(0.f);
-    std::cout << body2.GetInvertMass();
-    CircleShape circle;
-    circle.SetRadius(20.0f);
+    body2.SetInvertMass(1.f);
+    CircleShape circle(40.0f);
+    RectangleShape rect;
+    rect.SetSize(sf::Vector2f(200.f, 200.f));
     body1.SetShape(&circle);
-    body2.SetShape(&circle);
-    sf::CircleShape shape1(20.0f);
-    shape1.setOrigin(10.f, 10.f);
-    sf::CircleShape shape2(20.0f);
-    shape2.setOrigin(10.f, 10.f);
+    body2.SetShape(&rect);
+    sf::CircleShape shape1(40.f);
+    shape1.setFillColor(sf::Color::Cyan);
+    shape1.setOrigin(20.f, 20.f);
+    sf::RectangleShape shape2(sf::Vector2f(200.f, 200.f));
+    shape2.setOrigin(-20.f, -20.f);
 
     while (window.isOpen())
     {

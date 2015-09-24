@@ -3,6 +3,7 @@
 #include <SFML/System/Vector2.hpp>
 #include "PhysicBody.h"
 #include "CircleShape.h"
+#include "RectangleShape.hpp"
 #include <iostream>
 
 namespace Collision
@@ -40,11 +41,24 @@ namespace Collision
     void CircleToAABB(PhysicBody* body1, PhysicBody* body2)
     {
         const CircleShape* circle = static_cast<const CircleShape*>(body1->GetShape());
-        const CircleShape* aabb = static_cast<const RectangleShape*>(body2->GetShape());
+        const RectangleShape* aabb = static_cast<const RectangleShape*>(body2->GetShape());
         sf::Vector2f position1 = body1->GetPosition();
         sf::Vector2f position2 = body2->GetPosition();
+        sf::Vector2f velocity1 = body1->GetVelocity();
+        sf::Vector2f velocity2 = body2->GetVelocity();
+        float invertMass1 = body1->GetInvertMass();
+        float invertMass2 = body2->GetInvertMass();
+        sf::Vector2f boxSize = aabb->GetSize();
 
-        if (!IsColliding(circle, position1, &CircleShape(aabb->)))
+        sf::Vector2f norm = NormalizeVector(position2 - position1);
+        sf::Vector2f nearestPoint = position1 + circle->GetRadius() * norm;
+
+        if (!(nearestPoint.x <= position2.x + boxSize.x && nearestPoint.x >= position2.x &&
+            nearestPoint.y <= position2.y + boxSize.y && nearestPoint.y >= position2.y))
+            return;
+
+        std::cout << "X : " << nearestPoint.x << " Y : " << nearestPoint.y << std::endl;
+        body1->SetVelocity(sf::Vector2f(0, 0));
     }
 
     void AABBToCircle(PhysicBody* body1, PhysicBody* body2)
