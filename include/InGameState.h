@@ -4,23 +4,20 @@
 #include "State.h"
 #include "Table.h"
 
+class Game;
 
 class InGameState : public State
 {
-
- public:
-
-    virtual void Update();
-
-    virtual void draw();
-
-    virtual bool Init();
-
-
- private:
-    Table table;
-
-
+    public:
+        InGameState(Game* game);
+        ~InGameState() = default;
+        virtual bool Init();
+        virtual void ManageInput();
+        virtual void Update();
+        virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const;
+        virtual void Exit();
+    private:
+        Table table;
 };
 
 #endif // INGAMESTATE_H

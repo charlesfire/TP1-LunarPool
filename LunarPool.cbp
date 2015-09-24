@@ -52,33 +52,37 @@
 			<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/SFML-2.3/lib" />
 		</Linker>
 		<Unit filename="include/Ball.h" />
+		<Unit filename="include/CircleShape.h" />
+		<Unit filename="include/Collision.h" />
 		<Unit filename="include/Constantes.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/Hole.h" />
 		<Unit filename="include/InGameState.h" />
 		<Unit filename="include/InMenuState.h" />
-		<Unit filename="include/PhysicBox.h" />
-		<Unit filename="include/PhysicCircle.h" />
-		<Unit filename="include/PhysicObject.h" />
+		<Unit filename="include/Manifold.h" />
+		<Unit filename="include/PhysicBody.h" />
 		<Unit filename="include/PhysicWorld.h" />
+		<Unit filename="include/RectangleShape.hpp" />
+		<Unit filename="include/Shape.h" />
 		<Unit filename="include/State.h" />
 		<Unit filename="include/Table.h" />
 		<Unit filename="include/Wall.h" />
-		<Unit filename="include/temp.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Ball.cpp" />
+		<Unit filename="src/CircleShape.cpp" />
+		<Unit filename="src/Collision.cpp" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/Hole.cpp" />
 		<Unit filename="src/InGameState.cpp" />
 		<Unit filename="src/InMenuState.cpp" />
-		<Unit filename="src/PhysicBox.cpp" />
-		<Unit filename="src/PhysicCircle.cpp" />
-		<Unit filename="src/PhysicObject.cpp" />
+		<Unit filename="src/Manifold.cpp" />
+		<Unit filename="src/PhysicBody.cpp" />
 		<Unit filename="src/PhysicWorld.cpp" />
+		<Unit filename="src/RectangleShape.cpp" />
+		<Unit filename="src/Shape.cpp" />
 		<Unit filename="src/State.cpp" />
 		<Unit filename="src/Table.cpp" />
 		<Unit filename="src/Wall.cpp" />
-		<Unit filename="src/temp.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
