@@ -50,20 +50,28 @@ namespace Collision
         float invertMass2 = body2->GetInvertMass();
         sf::Vector2f boxSize = aabb->GetSize();
 
-        sf::Vector2f norm = NormalizeVector(position2 - position1);
-        sf::Vector2f nearestPoint = position1 + circle->GetRadius() * norm;
+        sf::Vector2f nearestPoint =  position1 - position2;
+        nearestPoint.x = std::min(std::max(nearestPoint.x, -boxSize.x), boxSize.x);
+        nearestPoint.y = std::min(std::max(nearestPoint.y, -boxSize.y), boxSize.y);
+        nearestPoint += position2;
+        std::cout << "X : " << nearestPoint.x << " Y : " << nearestPoint.y << std::endl;
 
-        if (!(nearestPoint.x <= position2.x + boxSize.x && nearestPoint.x >= position2.x &&
-            nearestPoint.y <= position2.y + boxSize.y && nearestPoint.y >= position2.y))
+        if ((nearestPoint.x - position1.x) * (nearestPoint.x - position1.x) + (nearestPoint.y - position1.y) * (nearestPoint.y - position1.y) >= circle->GetRadius() * circle->GetRadius())
             return;
 
-        std::cout << "X : " << nearestPoint.x << " Y : " << nearestPoint.y << std::endl;
-        body1->SetVelocity(sf::Vector2f(0, 0));
+        float smallestX = std::min(nearestPoint.x - (position2.x - boxSize.x), (position2.x + boxSize.x) - nearestPoint.x);
+        float smallestY = std::min(nearestPoint.y - (position2.y - boxSize.y), (position2.y + boxSize.y) - nearestPoint.y);
+        if (smallestX < smallestY)
+            body1->SetVelocity(sf::Vector2f(-velocity1.x, velocity1.y));
+        else if (smallestX == smallestY)
+            body1->SetVelocity(sf::Vector2f(-velocity1));
+        else
+            body1->SetVelocity(sf::Vector2f(velocity1.x, -velocity1.y));
     }
 
     void AABBToCircle(PhysicBody* body1, PhysicBody* body2)
     {
-
+        CircleToAABB(body2, body1);
     }
 
     void AABBToAABB(PhysicBody* body1, PhysicBody* body2)
@@ -80,10 +88,10 @@ namespace Collision
 
     sf::Vector2f NormalizeVector(const sf::Vector2f& vect)
     {
-        float norm = std::sqrt(vect.x * vect.x + vect.y * vect.y);
+        float length = std::sqrt(vect.x * vect.x + vect.y * vect.y);
 
-        if (norm == 0.0f)
+        if (length == 0.0f)
             return sf::Vector2f(0.0f, 0.0f);
-        return vect/norm;
+        return vect/length;
     }
 }
