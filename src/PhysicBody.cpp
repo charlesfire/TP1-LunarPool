@@ -13,6 +13,9 @@ PhysicBody::~PhysicBody()
 
 void PhysicBody::SetInvertMass(const float invertMass)
 {
+    if (invertMass == 0.f)
+        velocity = sf::Vector2f(0.f, 0.f);
+
     if (invertMass >= 0.f)
         this->invertMass = invertMass;
     else
@@ -21,13 +24,10 @@ void PhysicBody::SetInvertMass(const float invertMass)
 
 void PhysicBody::SetMass(const float mass)
 {
-    if (mass == 0.f)
-        this->invertMass = mass;
-    else if (mass > 0.f)
-        this->invertMass = 1.f / mass;
-    else
-        throw std::invalid_argument("Mass can't be negative.");
+    if (mass < 0.f)
+        throw std::invalid_argument("Invert mass can't be negative.");
 
+    SetInvertMass(1.f / mass);
 }
 
 void PhysicBody::SetPosition(const sf::Vector2f& position)

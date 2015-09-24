@@ -11,7 +11,7 @@ namespace Collision
     void CircleToAABB(PhysicBody* body1, PhysicBody* body2);
     void AABBToCircle(PhysicBody* body1, PhysicBody* body2);
     void AABBToAABB(PhysicBody* body1, PhysicBody* body2);
-    sf::Vector2f CalculateUnitVector(const sf::Vector2f& vect);
+    sf::Vector2f NormalizeVector(const sf::Vector2f& vect);
 
     std::function<void(PhysicBody*, PhysicBody*)> collisionCallbacks[Shape::Type::COUNT][Shape::Type::COUNT] = {{CircleToCircle, CircleToAABB}, {AABBToCircle, AABBToAABB}};
 
@@ -29,7 +29,7 @@ namespace Collision
         if (!IsColliding(circle1, position1, circle2, position2))
             return;
 
-        sf::Vector2f norm = CalculateUnitVector(position2 - position1);
+        sf::Vector2f norm = NormalizeVector(position2 - position1);
         float p = 2.f * ((velocity1.x * norm.x + velocity1.y * norm.y) - (velocity2.x * norm.x + velocity2.y * norm.y)) / (invertMass1 + invertMass2);
         body1->SetVelocity(velocity1 - p * invertMass1 * norm);
         body2->SetVelocity(velocity2 + p * invertMass2 * norm);
@@ -39,7 +39,12 @@ namespace Collision
 
     void CircleToAABB(PhysicBody* body1, PhysicBody* body2)
     {
+        const CircleShape* circle = static_cast<const CircleShape*>(body1->GetShape());
+        const CircleShape* aabb = static_cast<const RectangleShape*>(body2->GetShape());
+        sf::Vector2f position1 = body1->GetPosition();
+        sf::Vector2f position2 = body2->GetPosition();
 
+        if (!IsColliding(circle, position1, &CircleShape(aabb->)))
     }
 
     void AABBToCircle(PhysicBody* body1, PhysicBody* body2)
@@ -59,7 +64,7 @@ namespace Collision
                (circle1->GetRadius() + circle2->GetRadius()) * (circle1->GetRadius() + circle2->GetRadius());
     }
 
-    sf::Vector2f CalculateUnitVector(const sf::Vector2f& vect)
+    sf::Vector2f NormalizeVector(const sf::Vector2f& vect)
     {
         float norm = std::sqrt(vect.x * vect.x + vect.y * vect.y);
 

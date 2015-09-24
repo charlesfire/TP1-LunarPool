@@ -1,13 +1,8 @@
 #include "CircleShape.h"
 
-CircleShape::CircleShape()
+CircleShape::CircleShape() : radius(radius)
 {
     //ctor
-}
-
-CircleShape::~CircleShape()
-{
-    //dtor
 }
 
 void CircleShape::SetRadius(const float radius)
