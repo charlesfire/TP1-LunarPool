@@ -86,6 +86,11 @@
 		<Unit filename="src/State.cpp" />
 		<Unit filename="src/Table.cpp" />
 		<Unit filename="src/TextureManager.cpp" />
+		<Unit filename="src/RectangleWall.cpp" />
+		<Unit filename="src/Shape.cpp" />
+		<Unit filename="src/State.cpp" />
+		<Unit filename="src/Table.cpp" />
+		<Unit filename="src/TextureManager.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
