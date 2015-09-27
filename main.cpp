@@ -5,4 +5,6 @@ int main()
     Game myGame;
 
     return myGame.Run();
+
+    return 0;
 }

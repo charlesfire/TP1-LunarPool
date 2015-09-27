@@ -63,12 +63,20 @@
 		<Unit filename="include/Manifold.h" />
 		<Unit filename="include/PhysicBody.h" />
 		<Unit filename="include/PhysicWorld.h" />
+<<<<<<< HEAD
 		<Unit filename="include/RectangleShape.h" />
 		<Unit filename="include/RectangleWall.h" />
 		<Unit filename="include/Shape.h" />
 		<Unit filename="include/State.h" />
 		<Unit filename="include/Table.h" />
 		<Unit filename="include/TextureManager.hpp" />
+=======
+		<Unit filename="include/RectangleShape.hpp" />
+		<Unit filename="include/Shape.h" />
+		<Unit filename="include/State.h" />
+		<Unit filename="include/Table.h" />
+		<Unit filename="include/Wall.h" />
+>>>>>>> master
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Ball.cpp" />
 		<Unit filename="src/CircleShape.cpp" />
@@ -81,11 +89,18 @@
 		<Unit filename="src/PhysicBody.cpp" />
 		<Unit filename="src/PhysicWorld.cpp" />
 		<Unit filename="src/RectangleShape.cpp" />
+<<<<<<< HEAD
 		<Unit filename="src/RectangleWall.cpp" />
 		<Unit filename="src/Shape.cpp" />
 		<Unit filename="src/State.cpp" />
 		<Unit filename="src/Table.cpp" />
 		<Unit filename="src/TextureManager.cpp" />
+=======
+		<Unit filename="src/Shape.cpp" />
+		<Unit filename="src/State.cpp" />
+		<Unit filename="src/Table.cpp" />
+		<Unit filename="src/Wall.cpp" />
+>>>>>>> master
 		<Extensions>
 			<code_completion />
 			<envvars />
