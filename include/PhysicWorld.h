@@ -13,7 +13,7 @@ class PhysicWorld
         void Update();
         void AddBody(PhysicBody* body);
     private:
-        float friction;
+        const float friction = -0.005f;
         std::vector<PhysicBody*> bodies;
 };
 

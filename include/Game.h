@@ -23,6 +23,9 @@ class Game
             state->Init();
         }
     private:
+        void ManageInput();
+        void Update();
+        void Draw();
         sf::RenderWindow window;
         State* state;
 };

@@ -1,14 +1,21 @@
 #include "PhysicBody.h"
 #include <stdexcept>
 
-PhysicBody::PhysicBody() : shape(nullptr), position(0.0f, 0.0f), invertMass(1.f)
+PhysicBody::PhysicBody(const Shape* shape, const sf::Vector2f& position, const float mass) : shape(shape), position(position), invertMass(1.f/mass)
 {
-    //ctor
+    if (invertMass < 0.f)
+        throw std::invalid_argument("Mass can't be negative.");
 }
 
-PhysicBody::~PhysicBody()
+void PhysicBody::Impulse(const sf::Vector2f& impulse)
 {
-    //dtor
+    if (invertMass > 0.0f)
+        velocity += impulse;
+}
+
+void PhysicBody::Move(const sf::Vector2f& offset)
+{
+    position += offset;
 }
 
 void PhysicBody::SetInvertMass(const float invertMass)
@@ -39,11 +46,6 @@ void PhysicBody::SetVelocity(const sf::Vector2f& velocity)
 {
     if (invertMass > 0.f)
         this->velocity = velocity;
-}
-
-void PhysicBody::SetShape(Shape* shape)
-{
-    this->shape = shape;
 }
 
 float PhysicBody::GetInvertMass() const
