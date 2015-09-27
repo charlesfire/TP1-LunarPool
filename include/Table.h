@@ -8,7 +8,7 @@
 #include "PhysicWorld.h"
 
 class Hole;
-class Wall;
+class RectangleWall;
 class Ball;
 
 class Table : public sf::Drawable
@@ -24,7 +24,7 @@ class Table : public sf::Drawable
         bool LoadWalls(const std::string& file);
         bool LoadHoles(const std::string& file);
         std::vector<Hole*> holes;
-        std::vector<Wall*> walls;
+        std::vector<RectangleWall*> rectangleWalls;
         std::vector<Ball*> balls;
         Ball* whiteBall;
         PhysicWorld physicWorld;

@@ -3,8 +3,7 @@
 #include <SFML/System/Vector2.hpp>
 #include "PhysicBody.h"
 #include "CircleShape.h"
-#include "RectangleShape.hpp"
-#include <iostream>
+#include "RectangleShape.h"
 
 namespace Collision
 {
@@ -12,7 +11,6 @@ namespace Collision
     void CircleToAABB(PhysicBody* body1, PhysicBody* body2);
     void AABBToCircle(PhysicBody* body1, PhysicBody* body2);
     void AABBToAABB(PhysicBody* body1, PhysicBody* body2);
-    sf::Vector2f NormalizeVector(const sf::Vector2f& vect);
 
     std::function<void(PhysicBody*, PhysicBody*)> collisionCallbacks[Shape::Type::COUNT][Shape::Type::COUNT] = {{CircleToCircle, CircleToAABB}, {AABBToCircle, AABBToAABB}};
 
@@ -45,16 +43,12 @@ namespace Collision
         sf::Vector2f position1 = body1->GetPosition();
         sf::Vector2f position2 = body2->GetPosition();
         sf::Vector2f velocity1 = body1->GetVelocity();
-        /*sf::Vector2f velocity2 = body2->GetVelocity();
-        float invertMass1 = body1->GetInvertMass();
-        float invertMass2 = body2->GetInvertMass();*/
         sf::Vector2f boxSize = aabb->GetSize();
 
         sf::Vector2f nearestPoint =  position1 - position2;
-        nearestPoint.x = std::min(std::max(nearestPoint.x, -boxSize.x), boxSize.x);
-        nearestPoint.y = std::min(std::max(nearestPoint.y, -boxSize.y), boxSize.y);
+        nearestPoint.x = std::min(std::max(nearestPoint.x, 0.f), boxSize.x);
+        nearestPoint.y = std::min(std::max(nearestPoint.y, 0.f), boxSize.y);
         nearestPoint += position2;
-        std::cout << "X : " << nearestPoint.x << " Y : " << nearestPoint.y << std::endl;
 
         if ((nearestPoint.x - position1.x) * (nearestPoint.x - position1.x) + (nearestPoint.y - position1.y) * (nearestPoint.y - position1.y) >= circle->GetRadius() * circle->GetRadius())
             return;

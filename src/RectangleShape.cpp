@@ -1,14 +1,9 @@
-#include "RectangleShape.hpp"
+#include "RectangleShape.h"
 #include <stdexcept>
 
-RectangleShape::RectangleShape()
+RectangleShape::RectangleShape(const sf::Vector2f& size) : size(size)
 {
-    //ctor
-}
 
-RectangleShape::~RectangleShape()
-{
-    //dtor
 }
 
 void RectangleShape::SetSize(const sf::Vector2f& size)

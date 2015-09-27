@@ -7,7 +7,18 @@ void PhysicWorld::Update()
     for (unsigned int i(0); i < bodies.size(); i++)
     {
         if (bodies[i]->GetInvertMass() > 0.f)
-            bodies[i]->SetPosition(bodies[i]->GetPosition() + bodies[i]->GetVelocity());
+        {
+            sf::Vector2f oldVelocity = bodies[i]->GetVelocity();
+            sf::Vector2f newVelocity = oldVelocity;
+            newVelocity = Collision::NormalizeVector(newVelocity);
+            newVelocity *= friction;
+            if (newVelocity.x * newVelocity.x + newVelocity.y * newVelocity.y < oldVelocity.x * oldVelocity.x + oldVelocity.y * oldVelocity.y)
+                bodies[i]->Impulse(newVelocity);
+            else
+                bodies[i]->SetVelocity(sf::Vector2f(0.f, 0.f));
+
+            bodies[i]->Move(bodies[i]->GetVelocity());
+        }
     }
     for (unsigned int i(0); i < bodies.size(); i++)
     {

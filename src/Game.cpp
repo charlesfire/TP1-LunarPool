@@ -4,6 +4,7 @@
 
 Game::Game() : window(sf::VideoMode(800, 800), "Lunar Pool"), state(new InGameState(this))
 {
+    window.setFramerateLimit(60);
     if (!state->Init())
     {
         state->Exit();
@@ -48,7 +49,7 @@ void Game::Update()
 
 void Game::Draw()
 {
-    window.clear(sf::Color::Black);
+    window.clear(sf::Color::Green);
 
     window.draw(*state);
 
