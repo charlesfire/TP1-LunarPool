@@ -1,14 +1,17 @@
-#include "RectangleShape.hpp"
+#include "RectangleShape.h"
 #include <stdexcept>
 
-RectangleShape::RectangleShape()
+RectangleShape::RectangleShape(const sf::Vector2f& size) : size(size)
 {
-    //ctor
+
 }
 
-RectangleShape::~RectangleShape()
+void RectangleShape::SetSize(const sf::Vector2f& size)
 {
-    //dtor
+    if (size.x < 0.f || size.y < 0.f)
+        throw std::invalid_argument("Size can't be negative.");
+
+    this->size = size;
 }
 
 void RectangleShape::SetSize(const sf::Vector2f& size)
