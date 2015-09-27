@@ -4,7 +4,12 @@
 
 Game::Game() : window(sf::VideoMode(800, 800), "Lunar Pool"), state(new InGameState(this))
 {
-    state->Init();
+    if (!state->Init())
+    {
+        state->Exit();
+        delete state;
+        window.close();
+    }
 }
 
 Game::~Game()
@@ -35,7 +40,6 @@ void Game::ManageInput()
 
     state->ManageInput();
 }
-
 
 void Game::Update()
 {

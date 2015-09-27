@@ -8,7 +8,8 @@ class Shape;
 class PhysicBody
 {
     public:
-        PhysicBody();
+        PhysicBody() = delete;
+        PhysicBody(const Shape* shape = nullptr, const sf::Vector2f& position = sf::Vector2f(0.f, 0.f), const float mass = 1.f);
         virtual ~PhysicBody();
         void SetInvertMass(const float invertMass);
         void SetMass(const float mass);
@@ -20,9 +21,10 @@ class PhysicBody
         sf::Vector2f GetPosition()const;
         sf::Vector2f GetVelocity()const;
         const Shape* GetShape()const;
-    private:
-        Shape* shape;
+    protected:
         sf::Vector2f position, velocity;
+        const Shape* shape;
+    private:
         float invertMass;
 };
 

@@ -1,9 +1,10 @@
 #include "PhysicBody.h"
 #include <stdexcept>
 
-PhysicBody::PhysicBody() : shape(nullptr), position(0.0f, 0.0f), invertMass(1.f)
+PhysicBody::PhysicBody(const Shape* shape, const sf::Vector2f& position, const float mass) : shape(shape), position(position), invertMass(1.f/mass)
 {
-    //ctor
+    if (invertMass < 0.f)
+        throw std::invalid_argument("Mass can't be negative.");
 }
 
 PhysicBody::~PhysicBody()

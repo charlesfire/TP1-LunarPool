@@ -45,9 +45,9 @@ namespace Collision
         sf::Vector2f position1 = body1->GetPosition();
         sf::Vector2f position2 = body2->GetPosition();
         sf::Vector2f velocity1 = body1->GetVelocity();
-        sf::Vector2f velocity2 = body2->GetVelocity();
+        /*sf::Vector2f velocity2 = body2->GetVelocity();
         float invertMass1 = body1->GetInvertMass();
-        float invertMass2 = body2->GetInvertMass();
+        float invertMass2 = body2->GetInvertMass();*/
         sf::Vector2f boxSize = aabb->GetSize();
 
         sf::Vector2f nearestPoint =  position1 - position2;

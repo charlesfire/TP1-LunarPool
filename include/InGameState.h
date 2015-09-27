@@ -18,6 +18,7 @@ class InGameState : public State
         virtual void Exit();
     private:
         Table table;
+        unsigned int currentLevel;
 };
 
 #endif // INGAMESTATE_H
