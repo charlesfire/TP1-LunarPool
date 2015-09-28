@@ -13,7 +13,7 @@ Table::Table() : whiteBall(nullptr)
 
 Table::~Table()
 {
-
+    Unload();
 }
 
 void Table::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -28,6 +28,7 @@ void Table::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 bool Table::LoadFromFile(const std::string& fileName)
 {
+    Unload();
     std::ifstream fileStream(fileName);
     if (!fileStream.is_open())
         return false;
@@ -107,4 +108,26 @@ bool Table::LoadHoles(const std::string& file)
         buffer = match.suffix().str();
     }
     return true;
+}
+
+void Table::Unload()
+{
+    for (unsigned int i(0); i < balls.size(); i++)
+    {
+        delete balls[i];
+    }
+    balls.clear();
+    whiteBall = nullptr;
+
+    for (unsigned int i(0); i < rectangleWalls.size(); i++)
+    {
+        delete rectangleWalls[i];
+    }
+    rectangleWalls.clear();
+
+    for (unsigned int i(0); i < holes.size(); i++)
+    {
+        delete holes[i];
+    }
+    holes.clear();
 }

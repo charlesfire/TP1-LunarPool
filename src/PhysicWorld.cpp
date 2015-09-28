@@ -1,6 +1,7 @@
 #include "PhysicWorld.h"
 #include "PhysicBody.h"
 #include "Collision.h"
+#include <algorithm>
 
 void PhysicWorld::Update()
 {
@@ -35,4 +36,9 @@ void PhysicWorld::Update()
 void PhysicWorld::AddBody(PhysicBody* body)
 {
     bodies.push_back(body);
+}
+
+void PhysicWorld::RemoveBody(const PhysicBody* body)
+{
+    bodies.erase(std::remove(bodies.begin(), bodies.end(), body), bodies.end());
 }

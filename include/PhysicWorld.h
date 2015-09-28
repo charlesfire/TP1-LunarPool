@@ -12,6 +12,7 @@ class PhysicWorld
         virtual ~PhysicWorld() = default;
         void Update();
         void AddBody(PhysicBody* body);
+        void RemoveBody(const PhysicBody* body);
     private:
         const float friction = -0.005f;
         std::vector<PhysicBody*> bodies;

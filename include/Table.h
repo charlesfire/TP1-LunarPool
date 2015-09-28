@@ -23,6 +23,8 @@ class Table : public sf::Drawable
         bool LoadBalls(const std::string& file);
         bool LoadWalls(const std::string& file);
         bool LoadHoles(const std::string& file);
+        void Unload();
+
         std::vector<Hole*> holes;
         std::vector<RectangleWall*> rectangleWalls;
         std::vector<Ball*> balls;
