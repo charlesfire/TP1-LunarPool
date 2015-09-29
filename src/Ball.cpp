@@ -4,14 +4,15 @@
 #include "TextureManager.hpp"
 #include <iostream>
 
-const CircleShape Ball::CIRCLE(20.f);
+const float Ball::RADIUS(20.f);
+const CircleShape Ball::CIRCLE(Ball::RADIUS);
 
 Ball::Ball(unsigned int number, const sf::Vector2f& position) : PhysicBody(static_cast<const Shape*>(&Ball::CIRCLE), position), sprite(), number(number)
 {
     std::stringstream sstream;
     sstream << "Assets/" << number << ".png";
     sprite.setTexture(TextureManager::GetInstance().GetTexture(sstream.str()));
-    sprite.setOrigin(CIRCLE.GetRadius(), CIRCLE.GetRadius());
+    sprite.setOrigin(Ball::RADIUS, Ball::RADIUS);
 }
 
 void Ball::draw(sf::RenderTarget& target, sf::RenderStates states) const

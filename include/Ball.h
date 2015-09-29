@@ -15,6 +15,7 @@ class Ball : public PhysicBody, public sf::Drawable
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const;
         void Update();
         unsigned int GetNumber()const;
+        static const float RADIUS;
     private:
         sf::Sprite sprite;
         unsigned int number;

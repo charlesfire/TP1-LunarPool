@@ -3,12 +3,13 @@
 #include "CircleShape.h"
 #include "TextureManager.hpp"
 
-const CircleShape Hole::CIRCLE(25.f);
+const float Hole::RADIUS(25.f);
+const CircleShape Hole::CIRCLE(Hole::RADIUS);
 
 Hole::Hole(const sf::Vector2f& position) : sprite()
 {
     sprite.setTexture(TextureManager::GetInstance().GetTexture("Assets/Hole.png"));
-    sprite.setOrigin(CIRCLE.GetRadius(), CIRCLE.GetRadius());
+    sprite.setOrigin(Hole::RADIUS, Hole::RADIUS);
     sprite.setPosition(position);
 }
 

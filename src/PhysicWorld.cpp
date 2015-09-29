@@ -3,12 +3,24 @@
 #include "Collision.h"
 #include <algorithm>
 
+PhysicWorld::PhysicWorld() : bodies(), isSleeping(true)
+{
+
+}
+
+PhysicWorld::~PhysicWorld()
+{
+    bodies.clear();
+}
+
 void PhysicWorld::Update()
 {
+    isSleeping = true;
     for (unsigned int i(0); i < bodies.size(); i++)
     {
-        if (bodies[i]->GetInvertMass() > 0.f)
+        if (!bodies[i]->IsSleeping())
         {
+            isSleeping = false;
             sf::Vector2f oldVelocity = bodies[i]->GetVelocity();
             sf::Vector2f newVelocity = oldVelocity;
             newVelocity = Collision::NormalizeVector(newVelocity);
@@ -41,4 +53,9 @@ void PhysicWorld::AddBody(PhysicBody* body)
 void PhysicWorld::RemoveBody(const PhysicBody* body)
 {
     bodies.erase(std::remove(bodies.begin(), bodies.end(), body), bodies.end());
+}
+
+bool PhysicWorld::IsSleeping() const
+{
+    return isSleeping;
 }

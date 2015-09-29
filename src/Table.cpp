@@ -2,11 +2,13 @@
 #include <fstream>
 #include <regex>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include "Ball.h"
 #include "Hole.h"
 #include "RectangleWall.h"
+#include "Collision.h"
 
-Table::Table() : whiteBall(nullptr)
+Table::Table() : whiteBall(nullptr), lastWhiteBallPos(), score(0), comboScore(1), maxSpeed(20.f)
 {
 
 }
@@ -46,8 +48,42 @@ bool Table::LoadFromFile(const std::string& fileName)
 void Table::Update()
 {
     physicWorld.Update();
-    for (unsigned int i(0); i < balls.size(); i++)
-        balls[i]->Update();
+    for (auto it(balls.begin()); it < balls.end(); it++)
+    {
+        (*it)->Update();
+        for (unsigned int j(0); j < holes.size(); j++)
+        {
+            if (Collision::IsColliding(static_cast<const CircleShape*>((*it)->GetShape()), (*it)->GetPosition(), &holes[j]->GetShape(), holes[j]->GetPosition()))
+            {
+                if ((*it) == whiteBall)
+                {
+                    comboScore = 1;
+                    whiteBall->SetPosition(lastWhiteBallPos);
+                }
+                else
+                {
+                    score += comboScore++ * (*it)->GetNumber();
+                    physicWorld.RemoveBody((*it));
+                    delete (*it);
+                    balls.erase(it);
+                }
+                break;
+            }
+        }
+    }
+}
+
+void Table::ManageInput(const sf::Window& window)
+{
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && physicWorld.IsSleeping())
+    {
+        sf::Vector2f mousePos(sf::Mouse::getPosition(window));
+        sf::Vector2f force(mousePos - whiteBall->GetPosition());
+        if (force.x * force.x + force.y * force.y > maxSpeed * maxSpeed)
+            force = Collision::NormalizeVector(force) * maxSpeed;
+        whiteBall->Impulse(force);
+        lastWhiteBallPos = whiteBall->GetPosition();
+    }
 }
 
 bool Table::LoadBalls(const std::string& file)
@@ -66,7 +102,6 @@ bool Table::LoadBalls(const std::string& file)
                 if (whiteBall == nullptr)
                 {
                     whiteBall = temp;
-                    whiteBall->SetVelocity(sf::Vector2f(0.f, -15.f));
                 }
                 else
                 {
@@ -80,7 +115,11 @@ bool Table::LoadBalls(const std::string& file)
 
         buffer = match.suffix().str();
     }
-    return true;
+
+    if (whiteBall != nullptr)
+        lastWhiteBallPos = whiteBall->GetPosition();
+
+    return whiteBall != nullptr && balls.size() >= 2;
 }
 
 bool Table::LoadWalls(const std::string& file)
@@ -130,4 +169,5 @@ void Table::Unload()
         delete holes[i];
     }
     holes.clear();
+    lastWhiteBallPos = sf::Vector2f(0.f, 0.f);
 }

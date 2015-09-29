@@ -11,9 +11,9 @@ bool InGameState::Init()
     return table.LoadFromFile("Assets/Level1.txt");
 }
 
-void InGameState::ManageInput()
+void InGameState::ManageInput(const sf::Window& window)
 {
-
+    table.ManageInput(window);
 }
 
 void InGameState::Update()

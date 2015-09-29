@@ -12,7 +12,7 @@ class InGameState : public State
         InGameState(Game* game);
         ~InGameState() = default;
         virtual bool Init();
-        virtual void ManageInput();
+        virtual void ManageInput(const sf::Window& window);
         virtual void Update();
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const;
         virtual void Exit();

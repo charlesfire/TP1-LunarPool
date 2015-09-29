@@ -7,6 +7,11 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include "PhysicWorld.h"
 
+namespace sf
+{
+    class Window;
+}
+
 class Hole;
 class RectangleWall;
 class Ball;
@@ -19,6 +24,7 @@ class Table : public sf::Drawable
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const;
         bool LoadFromFile(const std::string& fileName);
         void Update();
+        void ManageInput(const sf::Window& window);
     private:
         bool LoadBalls(const std::string& file);
         bool LoadWalls(const std::string& file);
@@ -30,6 +36,10 @@ class Table : public sf::Drawable
         std::vector<Ball*> balls;
         Ball* whiteBall;
         PhysicWorld physicWorld;
+        sf::Vector2f lastWhiteBallPos;
+        unsigned int score;
+        unsigned int comboScore;
+        const float maxSpeed;
 };
 
 #endif // TABLE_H

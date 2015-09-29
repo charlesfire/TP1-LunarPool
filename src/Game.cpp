@@ -39,7 +39,7 @@ void Game::ManageInput()
             window.close();
     }
 
-    state->ManageInput();
+    state->ManageInput(window);
 }
 
 void Game::Update()

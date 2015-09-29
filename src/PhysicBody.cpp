@@ -1,7 +1,7 @@
 #include "PhysicBody.h"
 #include <stdexcept>
 
-PhysicBody::PhysicBody(const Shape* shape, const sf::Vector2f& position, const float mass) : shape(shape), position(position), invertMass(1.f/mass)
+PhysicBody::PhysicBody(const Shape* shape, const sf::Vector2f& position, const float mass) : shape(shape), position(position), invertMass(1.f/mass), isSleeping(true)
 {
     if (invertMass < 0.f)
         throw std::invalid_argument("Mass can't be negative.");
@@ -10,7 +10,17 @@ PhysicBody::PhysicBody(const Shape* shape, const sf::Vector2f& position, const f
 void PhysicBody::Impulse(const sf::Vector2f& impulse)
 {
     if (invertMass > 0.0f)
+    {
         velocity += impulse;
+        isSleeping = false;
+    }
+    else
+        isSleeping = true;
+}
+
+bool PhysicBody::IsSleeping() const
+{
+    return isSleeping;
 }
 
 void PhysicBody::Move(const sf::Vector2f& offset)
@@ -21,7 +31,10 @@ void PhysicBody::Move(const sf::Vector2f& offset)
 void PhysicBody::SetInvertMass(const float invertMass)
 {
     if (invertMass == 0.f)
+    {
         velocity = sf::Vector2f(0.f, 0.f);
+        isSleeping = true;
+    }
 
     if (invertMass >= 0.f)
         this->invertMass = invertMass;
@@ -45,7 +58,15 @@ void PhysicBody::SetPosition(const sf::Vector2f& position)
 void PhysicBody::SetVelocity(const sf::Vector2f& velocity)
 {
     if (invertMass > 0.f)
+    {
         this->velocity = velocity;
+        isSleeping = false;
+    }
+    else
+        isSleeping = true;
+
+    if (velocity.x == 0.f && velocity.y == 0.f)
+        isSleeping = true;
 }
 
 float PhysicBody::GetInvertMass() const

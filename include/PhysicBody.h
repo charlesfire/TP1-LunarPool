@@ -12,6 +12,7 @@ class PhysicBody
         PhysicBody(const Shape* shape = nullptr, const sf::Vector2f& position = sf::Vector2f(0.f, 0.f), const float mass = 1.f);
         virtual ~PhysicBody() = default;
         void Impulse(const sf::Vector2f& impulse);
+        bool IsSleeping()const;
         void Move(const sf::Vector2f& offset);
         void SetInvertMass(const float invertMass);
         void SetMass(const float mass);
@@ -27,6 +28,7 @@ class PhysicBody
         const Shape* shape;
     private:
         float invertMass;
+        bool isSleeping;
 };
 
 #endif // PHYSICBODY_H

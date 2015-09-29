@@ -15,6 +15,7 @@ class Hole : public sf::Drawable
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const;
         const sf::Vector2f& GetPosition()const;
         const CircleShape& GetShape()const;
+        static const float RADIUS;
     private:
         sf::Sprite sprite;
         static const CircleShape CIRCLE;
