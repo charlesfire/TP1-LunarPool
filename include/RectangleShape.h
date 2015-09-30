@@ -10,7 +10,9 @@ class RectangleShape : public Shape
         RectangleShape() = default;
         RectangleShape(const sf::Vector2f& size);
         virtual ~RectangleShape() = default;
+        void SetHalfSize(const sf::Vector2f& halfSize);
         void SetSize(const sf::Vector2f& size);
+        sf::Vector2f GetHalfSize()const;
         sf::Vector2f GetSize()const;
         virtual Type GetType()const;
     private:

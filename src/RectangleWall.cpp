@@ -1,12 +1,13 @@
 #include "RectangleWall.h"
 #include <SFML/Graphics/RenderTarget.hpp>
 
-RectangleWall::RectangleWall(const sf::Vector2f& topLeft, const sf::Vector2f& bottomRight) : PhysicBody(nullptr, topLeft)
+RectangleWall::RectangleWall(const sf::Vector2f& topLeft, const sf::Vector2f& size) : PhysicBody(nullptr, topLeft + size / 2.f)
 {
-    visual.setPosition(topLeft);
-    visual.setSize(bottomRight - topLeft);
+    visual.setPosition(position);
+    visual.setSize(size);
+    visual.setOrigin(size / 2.f);
     visual.setFillColor(sf::Color::Black);
-    shape = new RectangleShape(bottomRight - topLeft);
+    shape = new RectangleShape(size);
 }
 
 RectangleWall::~RectangleWall()

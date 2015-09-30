@@ -88,6 +88,10 @@ void Table::ManageInput(const sf::Window& window)
         whiteBall->Impulse(force);
         lastWhiteBallPos = whiteBall->GetPosition();
     }
+    if (!physicWorld.IsSleeping())
+    {
+        int i = 3;
+    }
 }
 
 bool Table::LoadBalls(const std::string& file)

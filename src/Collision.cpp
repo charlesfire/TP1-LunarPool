@@ -35,6 +35,7 @@ namespace Collision
 
         sf::Vector2f dist = norm * (circle1->GetRadius() + circle2->GetRadius());
         dist -= (position2 - position1);
+        dist /= invertMass2 + invertMass1;
 
         body1->Move(-dist * (invertMass2 / invertMass1));
         body2->Move(dist * (invertMass1 / invertMass2));
@@ -49,32 +50,29 @@ namespace Collision
         sf::Vector2f position1 = body1->GetPosition();
         sf::Vector2f position2 = body2->GetPosition();
         sf::Vector2f velocity1 = body1->GetVelocity();
-        sf::Vector2f boxSize = aabb->GetSize();
+        sf::Vector2f boxHalfSize = aabb->GetHalfSize();
 
         sf::Vector2f nearestPoint =  position1 - position2;
-        nearestPoint.x = std::min(std::max(nearestPoint.x, 0.f), boxSize.x);
-        nearestPoint.y = std::min(std::max(nearestPoint.y, 0.f), boxSize.y);
+        nearestPoint.x = std::min(std::max(nearestPoint.x, -boxHalfSize.x), boxHalfSize.x);
+        nearestPoint.y = std::min(std::max(nearestPoint.y, -boxHalfSize.y), boxHalfSize.y);
         nearestPoint += position2;
 
         if ((nearestPoint.x - position1.x) * (nearestPoint.x - position1.x) + (nearestPoint.y - position1.y) * (nearestPoint.y - position1.y) >= circle->GetRadius() * circle->GetRadius())
             return;
 
-        float smallestX = std::min(nearestPoint.x - (position2.x - boxSize.x), (position2.x + boxSize.x) - nearestPoint.x);
-        float smallestY = std::min(nearestPoint.y - (position2.y - boxSize.y), (position2.y + boxSize.y) - nearestPoint.y);
+        float smallestX = std::min(nearestPoint.x - (position2.x - boxHalfSize.x * 2.f), (position2.x + boxHalfSize.x * 2.f) - nearestPoint.x);
+        float smallestY = std::min(nearestPoint.y - (position2.y - boxHalfSize.y * 2.f), (position2.y + boxHalfSize.y * 2.f) - nearestPoint.y);
         if (smallestX < smallestY)
         {
             body1->SetVelocity(sf::Vector2f(-velocity1.x, velocity1.y));
-            body1->Move(sf::Vector2f(-smallestX, 0.f));
         }
         else if (smallestX == smallestY)
         {
             body1->SetVelocity(sf::Vector2f(-velocity1));
-            body1->Move(sf::Vector2f(-smallestX, -smallestY));
         }
         else
         {
             body1->SetVelocity(sf::Vector2f(velocity1.x, -velocity1.y));
-            body1->Move(sf::Vector2f(0.f, -smallestY));
         }
     }
 
