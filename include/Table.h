@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Graphics/Vertex.hpp>
 #include "PhysicWorld.h"
 
 namespace sf
@@ -40,6 +41,7 @@ class Table : public sf::Drawable
         unsigned int score;
         unsigned int comboScore;
         const float maxSpeed;
+        sf::Vertex powerLine[2];
 };
 
 #endif // TABLE_H

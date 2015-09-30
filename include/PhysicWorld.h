@@ -15,7 +15,7 @@ class PhysicWorld
         void RemoveBody(const PhysicBody* body);
         bool IsSleeping()const;
     private:
-        const float friction = -0.009f;
+        const float friction = -0.02f;
         std::vector<PhysicBody*> bodies;
         bool isSleeping;
 };

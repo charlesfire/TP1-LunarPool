@@ -33,6 +33,12 @@ namespace Collision
         body1->SetVelocity(velocity1 - p * invertMass1 * norm);
         body2->SetVelocity(velocity2 + p * invertMass2 * norm);
 
+        sf::Vector2f dist = norm * (circle1->GetRadius() + circle2->GetRadius());
+        dist -= (position2 - position1);
+
+        body1->Move(-dist * (invertMass2 / invertMass1));
+        body2->Move(dist * (invertMass1 / invertMass2));
+
         return;
     }
 
@@ -56,11 +62,20 @@ namespace Collision
         float smallestX = std::min(nearestPoint.x - (position2.x - boxSize.x), (position2.x + boxSize.x) - nearestPoint.x);
         float smallestY = std::min(nearestPoint.y - (position2.y - boxSize.y), (position2.y + boxSize.y) - nearestPoint.y);
         if (smallestX < smallestY)
+        {
             body1->SetVelocity(sf::Vector2f(-velocity1.x, velocity1.y));
+            body1->Move(sf::Vector2f(-smallestX, 0.f));
+        }
         else if (smallestX == smallestY)
+        {
             body1->SetVelocity(sf::Vector2f(-velocity1));
+            body1->Move(sf::Vector2f(-smallestX, -smallestY));
+        }
         else
+        {
             body1->SetVelocity(sf::Vector2f(velocity1.x, -velocity1.y));
+            body1->Move(sf::Vector2f(0.f, -smallestY));
+        }
     }
 
     void AABBToCircle(PhysicBody* body1, PhysicBody* body2)

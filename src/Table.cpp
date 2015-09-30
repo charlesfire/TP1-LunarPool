@@ -8,7 +8,7 @@
 #include "RectangleWall.h"
 #include "Collision.h"
 
-Table::Table() : whiteBall(nullptr), lastWhiteBallPos(), score(0), comboScore(1), maxSpeed(20.f)
+Table::Table() : whiteBall(nullptr), lastWhiteBallPos(), score(0), comboScore(1), maxSpeed(20.f), powerLine()
 {
 
 }
@@ -26,6 +26,8 @@ void Table::draw(sf::RenderTarget& target, sf::RenderStates states) const
         target.draw(*rectangleWalls[i]);
     for (unsigned int i(0); i < balls.size(); i++)
         target.draw(*balls[i]);
+    if (physicWorld.IsSleeping())
+        target.draw(powerLine, 2, sf::Lines);
 }
 
 bool Table::LoadFromFile(const std::string& fileName)
@@ -75,12 +77,14 @@ void Table::Update()
 
 void Table::ManageInput(const sf::Window& window)
 {
+    powerLine[0] = whiteBall->GetPosition();
+    sf::Vector2f mousePos(sf::Mouse::getPosition(window));
+    sf::Vector2f force((mousePos - whiteBall->GetPosition()) / 15.f);
+    if (force.x * force.x + force.y * force.y > maxSpeed * maxSpeed)
+            force = Collision::NormalizeVector(force) * maxSpeed;
+    powerLine[1] = whiteBall->GetPosition() + force * 15.f;
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && physicWorld.IsSleeping())
     {
-        sf::Vector2f mousePos(sf::Mouse::getPosition(window));
-        sf::Vector2f force(mousePos - whiteBall->GetPosition());
-        if (force.x * force.x + force.y * force.y > maxSpeed * maxSpeed)
-            force = Collision::NormalizeVector(force) * maxSpeed;
         whiteBall->Impulse(force);
         lastWhiteBallPos = whiteBall->GetPosition();
     }
@@ -102,6 +106,7 @@ bool Table::LoadBalls(const std::string& file)
                 if (whiteBall == nullptr)
                 {
                     whiteBall = temp;
+                    whiteBall->SetMass(2.f);
                 }
                 else
                 {
