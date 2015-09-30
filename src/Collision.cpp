@@ -65,14 +65,17 @@ namespace Collision
         if (smallestX < smallestY)
         {
             body1->SetVelocity(sf::Vector2f(-velocity1.x, velocity1.y));
+            body1->Move(((-velocity1.x > 0.f)? 1.f : -1.f) * sf::Vector2f(smallestX, 0.f));
         }
         else if (smallestX == smallestY)
         {
             body1->SetVelocity(sf::Vector2f(-velocity1));
+            body1->Move(sf::Vector2f(((-velocity1.x > 0.f)? 1.f : -1.f) * smallestX, ((-velocity1.y > 0.f)? 1.f : -1.f) * smallestY));
         }
         else
         {
             body1->SetVelocity(sf::Vector2f(velocity1.x, -velocity1.y));
+            body1->Move(((-velocity1.y > 0.f)? 1.f : -1.f) * sf::Vector2f(0.f, smallestY));
         }
     }
 
