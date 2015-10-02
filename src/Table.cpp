@@ -50,6 +50,7 @@ bool Table::LoadFromFile(const std::string& fileName)
 
 void Table::Update()
 {
+    bool hasScored = false;
     physicWorld.Update();
     for (auto it(balls.begin()); it < balls.end(); it++)
     {
@@ -68,6 +69,7 @@ void Table::Update()
                 {
                     score += comboScore++ * (*it)->GetNumber();
                     nbRemainingShot = NB_MAX_SHOT;
+                    hasScored = true;
                     physicWorld.RemoveBody(*it);
                     delete (*it);
                     balls.erase(it);
@@ -76,6 +78,9 @@ void Table::Update()
             }
         }
     }
+
+    if (!hasScored)
+        nbRemainingShot--;
 
     if (nbRemainingShot == 0)
     {
