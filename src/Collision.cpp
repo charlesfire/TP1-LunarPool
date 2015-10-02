@@ -37,8 +37,8 @@ namespace Collision
         dist -= (position2 - position1);
         dist /= invertMass2 + invertMass1;
 
-        body1->Move(-dist * (invertMass2 / invertMass1));
-        body2->Move(dist * (invertMass1 / invertMass2));
+        body1->Move(-dist * invertMass1);
+        body2->Move(dist * invertMass2);
 
         return;
     }
@@ -60,22 +60,23 @@ namespace Collision
         if ((nearestPoint.x - position1.x) * (nearestPoint.x - position1.x) + (nearestPoint.y - position1.y) * (nearestPoint.y - position1.y) >= circle->GetRadius() * circle->GetRadius())
             return;
 
-        float smallestX = std::min(nearestPoint.x - (position2.x - boxHalfSize.x * 2.f), (position2.x + boxHalfSize.x * 2.f) - nearestPoint.x);
-        float smallestY = std::min(nearestPoint.y - (position2.y - boxHalfSize.y * 2.f), (position2.y + boxHalfSize.y * 2.f) - nearestPoint.y);
+        float smallestX = std::min(nearestPoint.x - (position2.x - boxHalfSize.x), (position2.x + boxHalfSize.x) - nearestPoint.x);
+        float smallestY = std::min(nearestPoint.y - (position2.y - boxHalfSize.y), (position2.y + boxHalfSize.y) - nearestPoint.y);
         if (smallestX < smallestY)
         {
             body1->SetVelocity(sf::Vector2f(-velocity1.x, velocity1.y));
-            body1->Move(((-velocity1.x > 0.f)? 1.f : -1.f) * sf::Vector2f(smallestX, 0.f));
-        }
-        else if (smallestX == smallestY)
-        {
-            body1->SetVelocity(sf::Vector2f(-velocity1));
-            body1->Move(sf::Vector2f(((-velocity1.x > 0.f)? 1.f : -1.f) * smallestX, ((-velocity1.y > 0.f)? 1.f : -1.f) * smallestY));
+            if (velocity1.x < 0.f)
+                body1->SetPosition(sf::Vector2f(nearestPoint.x + circle->GetRadius(), position1.y));
+            else
+                body1->SetPosition(sf::Vector2f(nearestPoint.x - circle->GetRadius(), position1.y));
         }
         else
         {
             body1->SetVelocity(sf::Vector2f(velocity1.x, -velocity1.y));
-            body1->Move(((-velocity1.y > 0.f)? 1.f : -1.f) * sf::Vector2f(0.f, smallestY));
+            if (velocity1.y < 0.f)
+                body1->SetPosition(sf::Vector2f(position1.x, nearestPoint.y + circle->GetRadius()));
+            else
+                body1->SetPosition(sf::Vector2f(position1.x, nearestPoint.y - circle->GetRadius()));
         }
     }
 

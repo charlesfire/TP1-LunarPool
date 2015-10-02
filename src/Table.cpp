@@ -7,6 +7,7 @@
 #include "Hole.h"
 #include "RectangleWall.h"
 #include "Collision.h"
+#include "Constantes.h"
 
 Table::Table() : whiteBall(nullptr), lastWhiteBallPos(), score(0), comboScore(1), maxSpeed(20.f), powerLine()
 {
@@ -61,17 +62,25 @@ void Table::Update()
                 {
                     comboScore = 1;
                     whiteBall->SetPosition(lastWhiteBallPos);
+                    lives--;
                 }
                 else
                 {
                     score += comboScore++ * (*it)->GetNumber();
-                    physicWorld.RemoveBody((*it));
+                    nbRemainingShot = NB_MAX_SHOT;
+                    physicWorld.RemoveBody(*it);
                     delete (*it);
                     balls.erase(it);
                 }
                 break;
             }
         }
+    }
+
+    if (nbRemainingShot == 0)
+    {
+        lives--;
+        nbRemainingShot = NB_MAX_SHOT;
     }
 }
 
@@ -88,16 +97,12 @@ void Table::ManageInput(const sf::Window& window)
         whiteBall->Impulse(force);
         lastWhiteBallPos = whiteBall->GetPosition();
     }
-    if (!physicWorld.IsSleeping())
-    {
-        int i = 3;
-    }
 }
 
 bool Table::LoadBalls(const std::string& file)
 {
     std::string buffer = file;
-    std::regex ballRegex("(\\d+)\\((\\d+(\\.\\d+)?), *(\\d+(\\.\\d+)?)\\)");
+    std::regex ballRegex("(\\d+)\\((\\d+(\\.\\d+)?), ?(\\d+(\\.\\d+)?)\\)");
     std::smatch match;
     while (std::regex_search(buffer, match, ballRegex))
     {

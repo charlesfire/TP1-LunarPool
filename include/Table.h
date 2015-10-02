@@ -40,6 +40,8 @@ class Table : public sf::Drawable
         sf::Vector2f lastWhiteBallPos;
         unsigned int score;
         unsigned int comboScore;
+        unsigned int lives;
+        unsigned int nbRemainingShot;
         const float maxSpeed;
         sf::Vertex powerLine[2];
 };
