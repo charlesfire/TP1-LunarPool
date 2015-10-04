@@ -9,7 +9,7 @@ class PhysicBody
 {
     public:
         PhysicBody() = delete;
-        PhysicBody(const Shape* shape = nullptr, const sf::Vector2f& position = sf::Vector2f(0.f, 0.f), const float mass = 1.f);
+        PhysicBody(const Shape* const shape = nullptr, const sf::Vector2f& position = sf::Vector2f(0.f, 0.f), const float mass = 1.f);
         virtual ~PhysicBody() = default;
         void Impulse(const sf::Vector2f& impulse);
         bool IsSleeping()const;

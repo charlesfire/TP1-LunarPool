@@ -1,17 +1,44 @@
 #include "Table.h"
 #include <fstream>
 #include <regex>
+#include <iostream>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Window/Mouse.hpp>
 #include "Ball.h"
 #include "Hole.h"
 #include "RectangleWall.h"
+#include "CircleWall.h"
 #include "Collision.h"
 #include "Constantes.h"
 
-Table::Table() : whiteBall(nullptr), lastWhiteBallPos(), score(0), comboScore(1), maxSpeed(20.f), powerLine()
+Table::Table() : whiteBall(nullptr), lastWhiteBallPos(), score(0), comboScore(1), remainingLives(NB_MAX_LIVES), remainingShots(NB_MAX_SHOT), hasScored(true),
+                 maxSpeed(20.f), powerLine(), scoreText(), comboScoreText(), remainingLivesText(), remainingShotsText()
 {
+    sf::Color textColor(255, 255, 255, 240);
+    scoreText.setString("Score : ");
+    comboScoreText.setString("Combo : ");
+    remainingLivesText.setString("Remaining lives : ");
+    remainingShotsText.setString("Remaining shots : ");
 
+    scoreText.setColor(textColor);
+    comboScoreText.setColor(textColor);
+    remainingLivesText.setColor(textColor);
+    remainingShotsText.setColor(textColor);
+
+    scoreText.setPosition(5.f, 0.f);
+    comboScoreText.setPosition(5.f, scoreText.getCharacterSize());
+    remainingLivesText.setPosition(5.f, scoreText.getCharacterSize() * 2);
+    remainingShotsText.setPosition(5.f, scoreText.getCharacterSize() * 3);
+
+    if (!font.loadFromFile("Assets/LeviReBrushed.ttf"))
+        std::cerr << "Could not find font. No hud will be displayed" << std::endl;
+    else
+    {
+        scoreText.setFont(font);
+        comboScoreText.setFont(font);
+        remainingLivesText.setFont(font);
+        remainingShotsText.setFont(font);
+    }
 }
 
 Table::~Table()
@@ -23,12 +50,17 @@ void Table::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     for (unsigned int i(0); i < holes.size(); i++)
         target.draw(*holes[i]);
-    for (unsigned int i(0); i < rectangleWalls.size(); i++)
-        target.draw(*rectangleWalls[i]);
+    for (unsigned int i(0); i < walls.size(); i++)
+        target.draw(*walls[i]);
     for (unsigned int i(0); i < balls.size(); i++)
         target.draw(*balls[i]);
     if (physicWorld.IsSleeping())
         target.draw(powerLine, 2, sf::Lines);
+
+    target.draw(scoreText);
+    target.draw(comboScoreText);
+    target.draw(remainingLivesText);
+    target.draw(remainingShotsText);
 }
 
 bool Table::LoadFromFile(const std::string& fileName)
@@ -48,9 +80,8 @@ bool Table::LoadFromFile(const std::string& fileName)
     return LoadBalls(file) && LoadWalls(file) && LoadHoles(file);
 }
 
-void Table::Update()
+bool Table::Update()
 {
-    bool hasScored = false;
     physicWorld.Update();
     for (auto it(balls.begin()); it < balls.end(); it++)
     {
@@ -62,31 +93,50 @@ void Table::Update()
                 if ((*it) == whiteBall)
                 {
                     comboScore = 1;
-                    whiteBall->SetPosition(lastWhiteBallPos);
-                    lives--;
+                    whiteBall->SetPosition(sf::Vector2f(9999.f, 9999.f));
+                    whiteBall->SetVelocity(sf::Vector2f(0.f, 0.f));
+                    remainingLives--;
                 }
                 else
                 {
-                    score += comboScore++ * (*it)->GetNumber();
-                    nbRemainingShot = NB_MAX_SHOT;
-                    hasScored = true;
+                    score += comboScore++ * (*it)->GetNumber() * 10;
                     physicWorld.RemoveBody(*it);
                     delete (*it);
                     balls.erase(it);
                 }
+
+                hasScored = true;
+                remainingShots = NB_MAX_SHOT;
                 break;
             }
         }
     }
 
-    if (!hasScored)
-        nbRemainingShot--;
-
-    if (nbRemainingShot == 0)
+    if (physicWorld.IsSleeping())
     {
-        lives--;
-        nbRemainingShot = NB_MAX_SHOT;
+        if (!hasScored)
+        {
+            remainingShots--;
+            hasScored = true;
+            comboScore = 1;
+        }
+
+        if (whiteBall->GetPosition() == sf::Vector2f(9999.f, 9999.f))
+            whiteBall->SetPosition(lastWhiteBallPos);
     }
+
+    if (remainingShots == 0)
+    {
+        remainingLives--;
+        remainingShots = NB_MAX_SHOT;
+    }
+
+    scoreText.setString("Score : " + std::to_string(score));
+    comboScoreText.setString("Combo : " + std::to_string(comboScore));
+    remainingLivesText.setString("Remaining lives : " + std::to_string(remainingLives));
+    remainingShotsText.setString("Remaining shots : " + std::to_string(remainingShots));
+
+    return ((remainingLives == 0 || balls.size() == 1) && physicWorld.IsSleeping());
 }
 
 void Table::ManageInput(const sf::Window& window)
@@ -101,6 +151,7 @@ void Table::ManageInput(const sf::Window& window)
     {
         whiteBall->Impulse(force);
         lastWhiteBallPos = whiteBall->GetPosition();
+        hasScored = false;
     }
 }
 
@@ -120,7 +171,7 @@ bool Table::LoadBalls(const std::string& file)
                 if (whiteBall == nullptr)
                 {
                     whiteBall = temp;
-                    whiteBall->SetMass(2.f);
+                    whiteBall->SetMass(1.5f);
                 }
                 else
                 {
@@ -144,12 +195,21 @@ bool Table::LoadBalls(const std::string& file)
 bool Table::LoadWalls(const std::string& file)
 {
     std::string buffer = file;
-    std::regex ballRegex("w\\((\\d+(\\.\\d+)?), ?(\\d+(\\.\\d+)?); ?(\\d+(\\.\\d+)?), ?(\\d+(\\.\\d+)?)\\)");
+    std::regex wallRegex("r\\((\\d+(\\.\\d+)?), ?(\\d+(\\.\\d+)?); ?(\\d+(\\.\\d+)?), ?(\\d+(\\.\\d+)?)\\)");
     std::smatch match;
-    while (std::regex_search(buffer, match, ballRegex))
+    while (std::regex_search(buffer, match, wallRegex))
     {
-        rectangleWalls.push_back(new RectangleWall(sf::Vector2f(std::stof(match[1]), std::stof(match[3])), sf::Vector2f(std::stof(match[5]), std::stof(match[7]))));
-        physicWorld.AddBody(static_cast<PhysicBody*>(rectangleWalls[rectangleWalls.size() - 1]));
+        walls.push_back(new RectangleWall(sf::Vector2f(std::stof(match[1]), std::stof(match[3])), sf::Vector2f(std::stof(match[5]), std::stof(match[7]))));
+        physicWorld.AddBody(static_cast<PhysicBody*>(walls[walls.size() - 1]));
+        buffer = match.suffix().str();
+    }
+
+    buffer = file;
+    wallRegex = "c\\((\\d+(\\.\\d+)?), ?(\\d+(\\.\\d+)?), ?(\\d+(\\.\\d+)?)\\)";
+    while (std::regex_search(buffer, match, wallRegex))
+    {
+        walls.push_back(new CircleWall(sf::Vector2f(std::stof(match[1]), std::stof(match[3])), std::stof(match[5])));
+        physicWorld.AddBody(static_cast<PhysicBody*>(walls[walls.size() - 1]));
         buffer = match.suffix().str();
     }
     return true;
@@ -158,9 +218,9 @@ bool Table::LoadWalls(const std::string& file)
 bool Table::LoadHoles(const std::string& file)
 {
     std::string buffer = file;
-    std::regex ballRegex("h\\((\\d+(\\.\\d+)?), ?(\\d+(\\.\\d+)?)\\)");
+    std::regex holeRegex("h\\((\\d+(\\.\\d+)?), ?(\\d+(\\.\\d+)?)\\)");
     std::smatch match;
-    while (std::regex_search(buffer, match, ballRegex))
+    while (std::regex_search(buffer, match, holeRegex))
     {
         holes.push_back(new Hole(sf::Vector2f(std::stof(match[1]), std::stof(match[3]))));
         buffer = match.suffix().str();
@@ -172,16 +232,18 @@ void Table::Unload()
 {
     for (unsigned int i(0); i < balls.size(); i++)
     {
+        physicWorld.RemoveBody(balls[i]);
         delete balls[i];
     }
     balls.clear();
     whiteBall = nullptr;
 
-    for (unsigned int i(0); i < rectangleWalls.size(); i++)
+    for (unsigned int i(0); i < walls.size(); i++)
     {
-        delete rectangleWalls[i];
+        physicWorld.RemoveBody(walls[i]);
+        delete walls[i];
     }
-    rectangleWalls.clear();
+    walls.clear();
 
     for (unsigned int i(0); i < holes.size(); i++)
     {

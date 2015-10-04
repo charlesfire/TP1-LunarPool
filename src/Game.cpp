@@ -2,7 +2,7 @@
 #include "InGameState.h"
 #include <SFML/Window/Event.hpp>
 
-Game::Game() : window(sf::VideoMode(800, 800), "Lunar Pool"), state(new InGameState(this))
+Game::Game() : window(sf::VideoMode(1280, 768), "Lunar Pool"), state(new InGameState(this))
 {
     window.setFramerateLimit(60);
     if (!state->Init())

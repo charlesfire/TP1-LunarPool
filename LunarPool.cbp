@@ -54,13 +54,13 @@
 		</Linker>
 		<Unit filename="include/Ball.h" />
 		<Unit filename="include/CircleShape.h" />
+		<Unit filename="include/CircleWall.h" />
 		<Unit filename="include/Collision.h" />
 		<Unit filename="include/Constantes.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/Hole.h" />
 		<Unit filename="include/InGameState.h" />
 		<Unit filename="include/InMenuState.h" />
-		<Unit filename="include/Manifold.h" />
 		<Unit filename="include/PhysicBody.h" />
 		<Unit filename="include/PhysicWorld.h" />
 		<Unit filename="include/RectangleShape.h" />
@@ -69,15 +69,16 @@
 		<Unit filename="include/State.h" />
 		<Unit filename="include/Table.h" />
 		<Unit filename="include/TextureManager.hpp" />
+		<Unit filename="include/Wall.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Ball.cpp" />
 		<Unit filename="src/CircleShape.cpp" />
+		<Unit filename="src/CircleWall.cpp" />
 		<Unit filename="src/Collision.cpp" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/Hole.cpp" />
 		<Unit filename="src/InGameState.cpp" />
 		<Unit filename="src/InMenuState.cpp" />
-		<Unit filename="src/Manifold.cpp" />
 		<Unit filename="src/PhysicBody.cpp" />
 		<Unit filename="src/PhysicWorld.cpp" />
 		<Unit filename="src/RectangleShape.cpp" />
@@ -86,6 +87,7 @@
 		<Unit filename="src/State.cpp" />
 		<Unit filename="src/Table.cpp" />
 		<Unit filename="src/TextureManager.cpp" />
+		<Unit filename="src/Wall.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

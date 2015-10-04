@@ -1,5 +1,9 @@
 #include "InGameState.h"
+#include <string>
+#include <iostream>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include "Game.h"
+#include "InMenuState.h"
 
 InGameState::InGameState(Game* game) : State(game), currentLevel(0)
 {
@@ -8,7 +12,7 @@ InGameState::InGameState(Game* game) : State(game), currentLevel(0)
 
 bool InGameState::Init()
 {
-    return table.LoadFromFile("Assets/Level1.txt");
+    return table.LoadFromFile("Assets/Level-" + std::to_string(currentLevel) + ".txt");
 }
 
 void InGameState::ManageInput(const sf::Window& window)
@@ -18,7 +22,13 @@ void InGameState::ManageInput(const sf::Window& window)
 
 void InGameState::Update()
 {
-    table.Update();
+    if (table.Update())
+    {
+        if (!table.LoadFromFile("Assets/Level-" + std::to_string(++currentLevel) + ".txt"))
+        {
+            game->ChangeState<InGameState>();
+        }
+    }
 }
 
 void InGameState::draw(sf::RenderTarget& target, sf::RenderStates states)const
