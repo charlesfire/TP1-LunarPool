@@ -112,17 +112,9 @@ bool Table::Update()
         }
     }
 
-    if (physicWorld.IsSleeping())
+    if (physicWorld.IsSleeping() && whiteBall->GetPosition() == sf::Vector2f(9999.f, 9999.f))
     {
-        if (!hasScored)
-        {
-            remainingShots--;
-            hasScored = true;
-            comboScore = 1;
-        }
-
-        if (whiteBall->GetPosition() == sf::Vector2f(9999.f, 9999.f))
-            whiteBall->SetPosition(lastWhiteBallPos);
+        whiteBall->SetPosition(lastWhiteBallPos);
     }
 
     if (remainingShots == 0)
@@ -152,6 +144,7 @@ void Table::ManageInput(const sf::Window& window)
         whiteBall->Impulse(force);
         lastWhiteBallPos = whiteBall->GetPosition();
         hasScored = false;
+        remainingShots--;
     }
 }
 
@@ -163,21 +156,17 @@ bool Table::LoadBalls(const std::string& file)
     while (std::regex_search(buffer, match, ballRegex))
     {
         unsigned int number = std::stoi(match[1]);
+        for (unsigned int i(0); i < balls.size(); i++)
+            if (balls[i]->GetNumber() == number)
+                return false;
+
         if (number >= 0 && number <= 15)
         {
             Ball* temp = new Ball(number, sf::Vector2f(std::stof(match[2]), std::stof(match[4])));
             if (number == 0)
             {
-                if (whiteBall == nullptr)
-                {
-                    whiteBall = temp;
-                    whiteBall->SetMass(1.5f);
-                }
-                else
-                {
-                    delete temp;
-                    return false;
-                }
+                whiteBall = temp;
+                whiteBall->SetMass(1.5f);
             }
             balls.push_back(temp);
             physicWorld.AddBody(static_cast<PhysicBody*>(temp));
