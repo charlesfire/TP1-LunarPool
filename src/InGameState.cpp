@@ -5,7 +5,7 @@
 #include "Game.h"
 #include "InMenuState.h"
 
-InGameState::InGameState(Game* game) : State(game), currentLevel(4)
+InGameState::InGameState(Game* game) : State(game), currentLevel(0)
 {
 
 }

@@ -103,18 +103,20 @@ bool Table::Update()
                     physicWorld.RemoveBody(*it);
                     delete (*it);
                     balls.erase(it);
+                    hasScored = true;
                 }
-
-                hasScored = true;
                 remainingShots = NB_MAX_SHOT;
                 break;
             }
         }
     }
 
-    if (physicWorld.IsSleeping() && whiteBall->GetPosition() == sf::Vector2f(9999.f, 9999.f))
+    if (physicWorld.IsSleeping())
     {
-        whiteBall->SetPosition(lastWhiteBallPos);
+        if (whiteBall->GetPosition() == sf::Vector2f(9999.f, 9999.f))
+            whiteBall->SetPosition(lastWhiteBallPos);
+        if (!hasScored)
+            comboScore = 1;
     }
 
     if (remainingShots == 0)
