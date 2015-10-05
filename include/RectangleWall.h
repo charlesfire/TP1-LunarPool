@@ -3,9 +3,8 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "Wall.h"
-#include "RectangleShape.h"
 
-class RectangleWall : public Wall
+class RectangleWall final : public Wall
 {
     public:
         RectangleWall() = delete;

@@ -27,6 +27,8 @@ class Table : public sf::Drawable
         bool LoadFromFile(const std::string& fileName);
         bool Update();
         void ManageInput(const sf::Window& window);
+        unsigned int GetScore()const;
+        int GetRemainingLives()const;
     private:
         bool LoadBalls(const std::string& file);
         bool LoadWalls(const std::string& file);
@@ -41,12 +43,12 @@ class Table : public sf::Drawable
         sf::Vector2f lastWhiteBallPos;
         unsigned int score;
         unsigned int comboScore;
-        unsigned int remainingLives;
+        int remainingLives;
         unsigned int remainingShots;
         bool hasScored;
         const float maxSpeed;
         sf::Vertex powerLine[2];
-        sf::Text scoreText, comboScoreText, remainingLivesText, remainingShotsText;
+        sf::Text scoreText, comboScoreText, remainingLivesText, remainingShotsText, powerText;
         sf::Font font;
         unsigned int level;
 };

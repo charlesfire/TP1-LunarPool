@@ -19,7 +19,6 @@ class State : public sf::Drawable
         virtual void ManageInput(const sf::Window& window) = 0;
         virtual void Update() = 0;
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states)const = 0;
-        virtual void Exit() = 0;
     protected:
         Game* game;
 };

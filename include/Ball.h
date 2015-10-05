@@ -6,7 +6,7 @@
 #include <PhysicBody.h>
 #include <CircleShape.h>
 
-class Ball : public PhysicBody, public sf::Drawable
+class Ball final : public PhysicBody, public sf::Drawable
 {
     public:
         Ball() = delete;
@@ -18,7 +18,7 @@ class Ball : public PhysicBody, public sf::Drawable
         static const float RADIUS;
     private:
         sf::Sprite sprite;
-        unsigned int number;
+        const unsigned int number;
         static const CircleShape CIRCLE;
 };
 

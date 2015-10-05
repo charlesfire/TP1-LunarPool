@@ -1,5 +1,6 @@
 #include "CircleWall.h"
 #include <SFML/Graphics/RenderTarget.hpp>
+#include "CircleShape.h"
 
 CircleWall::CircleWall(const sf::Vector2f& position, const float radius) : Wall(new CircleShape(radius), position)
 {

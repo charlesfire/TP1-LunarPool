@@ -1,5 +1,6 @@
 #include "RectangleWall.h"
 #include <SFML/Graphics/RenderTarget.hpp>
+#include "RectangleShape.h"
 
 RectangleWall::RectangleWall(const sf::Vector2f& topLeft, const sf::Vector2f& size) : Wall(new RectangleShape(size), topLeft + size / 2.f)
 {

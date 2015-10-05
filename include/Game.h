@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include <type_traits>
+#include <iostream>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "state.h"
 
@@ -13,15 +14,16 @@ class Game
         Game();
         ~Game();
         int Run();
-        template<class T>
-        void ChangeState()
+        template<class T, class ...Args>
+        void ChangeState(Args... args)
         {
             static_assert(std::is_base_of<State, T>::value, "Template argument is not derived from State.");
-            state->Exit();
             delete state;
-            state = new T(this);
-            state->Init();
+            state = new T(this, args...);
+            if (!state->Init())
+                std::cerr << "Game failed to change state." << std::endl;
         }
+        void Quit();
     private:
         void ManageInput();
         void Update();

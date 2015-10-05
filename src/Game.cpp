@@ -1,13 +1,13 @@
 #include "Game.h"
-#include "InGameState.h"
 #include <SFML/Window/Event.hpp>
+#include "SplashScreenState.h"
+#include "Constantes.h"
 
-Game::Game() : window(sf::VideoMode(1280, 768), "Lunar Pool"), state(new InGameState(this))
+Game::Game() : window(sf::VideoMode(Constantes::WINDOW_WIDTH, Constantes::WINDOW_HEIGHT), "Lunar Pool"), state(new SplashScreenState(this))
 {
     window.setFramerateLimit(60);
     if (!state->Init())
     {
-        state->Exit();
         delete state;
         window.close();
     }
@@ -15,8 +15,12 @@ Game::Game() : window(sf::VideoMode(1280, 768), "Lunar Pool"), state(new InGameS
 
 Game::~Game()
 {
-    state->Exit();
     delete state;
+}
+
+void Game::Quit()
+{
+    window.close();
 }
 
 int Game::Run()

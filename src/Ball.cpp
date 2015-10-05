@@ -2,7 +2,6 @@
 #include <sstream>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include "TextureManager.hpp"
-#include <iostream>
 
 const float Ball::RADIUS(20.f);
 const CircleShape Ball::CIRCLE(Ball::RADIUS);

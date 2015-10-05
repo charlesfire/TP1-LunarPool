@@ -19,7 +19,7 @@ void RectangleShape::SetSize(const sf::Vector2f& size)
     this->size = size;
 }
 
-sf::Vector2f RectangleShape::GetSize() const
+const sf::Vector2f& RectangleShape::GetSize() const
 {
     return size;
 }

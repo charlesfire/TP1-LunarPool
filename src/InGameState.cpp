@@ -1,9 +1,8 @@
 #include "InGameState.h"
 #include <string>
-#include <iostream>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include "Game.h"
-#include "InMenuState.h"
+#include "EndGameState.h"
 
 InGameState::InGameState(Game* game) : State(game), currentLevel(0)
 {
@@ -24,9 +23,9 @@ void InGameState::Update()
 {
     if (table.Update())
     {
-        if (!table.LoadFromFile("Assets/Level-" + std::to_string(++currentLevel) + ".txt"))
+        if (!table.GetRemainingLives() || !table.LoadFromFile("Assets/Level-" + std::to_string(++currentLevel) + ".txt"))
         {
-            game->ChangeState<InGameState>();
+            game->ChangeState<EndGameState>(table.GetScore());
         }
     }
 }
@@ -34,9 +33,4 @@ void InGameState::Update()
 void InGameState::draw(sf::RenderTarget& target, sf::RenderStates states)const
 {
     target.draw(table);
-}
-
-void InGameState::Exit()
-{
-
 }

@@ -57,7 +57,7 @@ namespace Collision
         nearestPoint.y = std::min(std::max(nearestPoint.y, -boxHalfSize.y), boxHalfSize.y);
         nearestPoint += position2;
 
-        if ((nearestPoint.x - position1.x) * (nearestPoint.x - position1.x) + (nearestPoint.y - position1.y) * (nearestPoint.y - position1.y) >= circle->GetRadius() * circle->GetRadius())
+        if (!IsColliding(circle, position1, aabb, position2))
             return;
 
         float smallestX = std::min(nearestPoint.x - (position2.x - boxHalfSize.x), (position2.x + boxHalfSize.x) - nearestPoint.x);
@@ -87,7 +87,7 @@ namespace Collision
 
     void AABBToAABB(PhysicBody* body1, PhysicBody* body2)
     {
-
+        //Todo : Pour un prochain TP.
     }
 
     bool IsColliding(const CircleShape* circle1, const sf::Vector2f& position1, const CircleShape* circle2, const sf::Vector2f& position2)
@@ -95,6 +95,18 @@ namespace Collision
         return (position1.x - position2.x) * (position1.x - position2.x) +
                (position1.y - position2.y) * (position1.y - position2.y) <=
                (circle1->GetRadius() + circle2->GetRadius()) * (circle1->GetRadius() + circle2->GetRadius());
+    }
+
+    bool IsColliding(const CircleShape* circle, const sf::Vector2f& position1, const RectangleShape* rectangle, const sf::Vector2f& position2)
+    {
+        sf::Vector2f nearestPoint =  position1 - position2;
+        sf::Vector2f boxHalfSize = rectangle->GetHalfSize();
+        nearestPoint.x = std::min(std::max(nearestPoint.x, -boxHalfSize.x), boxHalfSize.x);
+        nearestPoint.y = std::min(std::max(nearestPoint.y, -boxHalfSize.y), boxHalfSize.y);
+        nearestPoint += position2;
+        return ((position1.x - nearestPoint.x) * (position1.x - nearestPoint.x) +
+               (position1.y - nearestPoint.y) * (position1.y - nearestPoint.y) <=
+               (circle->GetRadius() * circle->GetRadius()));
     }
 
     sf::Vector2f NormalizeVector(const sf::Vector2f& vect)

@@ -20,8 +20,8 @@ class PhysicBody
         void SetVelocity(const sf::Vector2f& velocity);
         float GetInvertMass()const;
         float GetMass()const;
-        sf::Vector2f GetPosition()const;
-        sf::Vector2f GetVelocity()const;
+        const sf::Vector2f& GetPosition()const;
+        const sf::Vector2f& GetVelocity()const;
         const Shape* GetShape()const;
     protected:
         sf::Vector2f position, velocity;

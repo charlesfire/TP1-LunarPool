@@ -79,12 +79,12 @@ float PhysicBody::GetMass() const
     return 1.f / invertMass;
 }
 
-sf::Vector2f PhysicBody::GetPosition() const
+const sf::Vector2f& PhysicBody::GetPosition() const
 {
     return position;
 }
 
-sf::Vector2f PhysicBody::GetVelocity()const
+const sf::Vector2f& PhysicBody::GetVelocity()const
 {
     return velocity;
 }

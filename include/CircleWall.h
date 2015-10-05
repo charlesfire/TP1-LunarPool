@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics/CircleShape.hpp>
 #include "Wall.h"
-#include "CircleShape.h"
 
 class CircleWall : public Wall
 {

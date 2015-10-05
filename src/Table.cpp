@@ -1,4 +1,5 @@
 #include "Table.h"
+#include <cmath>
 #include <fstream>
 #include <regex>
 #include <iostream>
@@ -11,24 +12,28 @@
 #include "Collision.h"
 #include "Constantes.h"
 
-Table::Table() : whiteBall(nullptr), lastWhiteBallPos(), score(0), comboScore(1), remainingLives(NB_MAX_LIVES), remainingShots(NB_MAX_SHOT), hasScored(true),
-                 maxSpeed(20.f), powerLine(), scoreText(), comboScoreText(), remainingLivesText(), remainingShotsText()
+Table::Table() : whiteBall(nullptr), lastWhiteBallPos(), score(0), comboScore(1), remainingLives(Constantes::NB_MAX_LIVES),
+                 remainingShots(Constantes::NB_MAX_SHOT), hasScored(true), maxSpeed(20.f), powerLine(), scoreText(), comboScoreText(),
+                 remainingLivesText(), remainingShotsText(), powerText()
 {
     sf::Color textColor(255, 255, 255, 240);
     scoreText.setString("Score : ");
     comboScoreText.setString("Combo : ");
     remainingLivesText.setString("Remaining lives : ");
     remainingShotsText.setString("Remaining shots : ");
+    powerText.setString("Power : ");
 
     scoreText.setColor(textColor);
     comboScoreText.setColor(textColor);
     remainingLivesText.setColor(textColor);
     remainingShotsText.setColor(textColor);
+    powerText.setColor(textColor);
 
     scoreText.setPosition(5.f, 0.f);
     comboScoreText.setPosition(5.f, scoreText.getCharacterSize());
     remainingLivesText.setPosition(5.f, scoreText.getCharacterSize() * 2);
     remainingShotsText.setPosition(5.f, scoreText.getCharacterSize() * 3);
+    powerText.setPosition(5.f, scoreText.getCharacterSize() * 4);
 
     if (!font.loadFromFile("Assets/LeviReBrushed.ttf"))
         std::cerr << "Could not find font. No hud will be displayed" << std::endl;
@@ -38,6 +43,7 @@ Table::Table() : whiteBall(nullptr), lastWhiteBallPos(), score(0), comboScore(1)
         comboScoreText.setFont(font);
         remainingLivesText.setFont(font);
         remainingShotsText.setFont(font);
+        powerText.setFont(font);
     }
 }
 
@@ -61,6 +67,7 @@ void Table::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(comboScoreText);
     target.draw(remainingLivesText);
     target.draw(remainingShotsText);
+    target.draw(powerText);
 }
 
 bool Table::LoadFromFile(const std::string& fileName)
@@ -105,7 +112,7 @@ bool Table::Update()
                     balls.erase(it);
                     hasScored = true;
                 }
-                remainingShots = NB_MAX_SHOT;
+                remainingShots = Constantes::NB_MAX_SHOT;
                 break;
             }
         }
@@ -122,7 +129,7 @@ bool Table::Update()
     if (remainingShots == 0)
     {
         remainingLives--;
-        remainingShots = NB_MAX_SHOT;
+        remainingShots = Constantes::NB_MAX_SHOT;
     }
 
     scoreText.setString("Score : " + std::to_string(score));
@@ -130,7 +137,7 @@ bool Table::Update()
     remainingLivesText.setString("Remaining lives : " + std::to_string(remainingLives));
     remainingShotsText.setString("Remaining shots : " + std::to_string(remainingShots));
 
-    return ((remainingLives == 0 || balls.size() == 1) && physicWorld.IsSleeping());
+    return ((remainingLives <= 0 || balls.size() == 1) && physicWorld.IsSleeping());
 }
 
 void Table::ManageInput(const sf::Window& window)
@@ -141,6 +148,7 @@ void Table::ManageInput(const sf::Window& window)
     if (force.x * force.x + force.y * force.y > maxSpeed * maxSpeed)
             force = Collision::NormalizeVector(force) * maxSpeed;
     powerLine[1] = whiteBall->GetPosition() + force * 15.f;
+    powerText.setString("Power : " + std::to_string(sqrtf(force.x * force.x + force.y * force.y)));
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && physicWorld.IsSleeping())
     {
         whiteBall->Impulse(force);
@@ -148,6 +156,16 @@ void Table::ManageInput(const sf::Window& window)
         hasScored = false;
         remainingShots--;
     }
+}
+
+unsigned int Table::GetScore() const
+{
+    return score;
+}
+
+int Table::GetRemainingLives() const
+{
+    return remainingLives;
 }
 
 bool Table::LoadBalls(const std::string& file)
